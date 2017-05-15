@@ -3,8 +3,8 @@ module Tsp
     module Debug
         @enum Level OFF=-1 ERROR=1 WARN LOG INFO DEBUG
 
-        LEVEL = LOG
-        export @debug, @info, @log, @warn, @error OFF, ERROR, WARN, INFO, DEBUG
+        LEVEL = OFF
+        export @debug, @info, @log, @warn, @error
 
         for (mac, lvl) in ((:debug, DEBUG),
                             (:info, INFO),
@@ -17,9 +17,12 @@ module Tsp
             end
     end
 
+    Float32 = Float64
+
+
     include("util.jl")
     include("model/model.jl")
     include("solvers/solvers.jl")
     export Model, Solvers, Util
 
-end #module
+end

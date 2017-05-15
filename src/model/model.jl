@@ -8,4 +8,5 @@ module Model
     include("Routes.jl")
     export Route
     export score, score!, total_distance, report, nearest_neighbour, find_nearest
+
 end

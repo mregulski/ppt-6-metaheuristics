@@ -1,3 +1,5 @@
+import Base.show
+import Base.zero
 type Route
     route::Array{City}
     score::Float32
@@ -10,6 +12,8 @@ Base.length(r::Route) = length(r.route)
 Base.getindex(r::Route, idx) = getindex(r.route, idx)
 Base.setindex!(r::Route, val, idx) = setindex!(r.route, val, idx)
 Base.endof(r::Route) = endof(r.route)
+
+zero(::Type{Route}) = Route(zeros(City, 0), -1)
 
 function Base.show(io::IO, route::Route)
     print(io, "Route(")
@@ -34,18 +38,12 @@ function score(cities::Array{City}, grid::Grid)
 end
 
 function score!(route::Route)
-    if route.has_score
-        route.score = score(route.route)
-        route.has_score = false
-    end
+    route.score = score(route.route)
     route.score
 end
 
 function score!(route::Route, grid::Grid)
-    if route.has_score
-        route.score = score(route.route, grid)
-        route.has_score = false
-    end
+    route.score = score(route.route, grid)
     route.score
 end
 
