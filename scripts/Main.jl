@@ -1,5 +1,6 @@
 #!julia
-push!(LOAD_PATH, "./src")
+include("../src/Tsp.jl")
+println(LOAD_PATH)
 using Tsp.Model
 using Tsp.Solvers
 using Tsp.Debug
