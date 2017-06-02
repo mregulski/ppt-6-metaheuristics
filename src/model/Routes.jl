@@ -1,23 +1,23 @@
 import Base.show
 import Base.zero
 type Route
-    route::Array{City}
+    cities::Array{City}
     score::Float32
 end
 
 Route(cities::Array{City}) = Route(copy(cities), score(cities))
-Route(route::Route) = Route(copy(route.route), route.score)
+Route(route::Route) = Route(copy(route.cities), route.score)
 
-Base.length(r::Route) = length(r.route)
-Base.getindex(r::Route, idx) = getindex(r.route, idx)
-Base.setindex!(r::Route, val, idx) = setindex!(r.route, val, idx)
-Base.endof(r::Route) = endof(r.route)
+Base.length(r::Route) = length(r.cities)
+Base.getindex(r::Route, idx) = getindex(r.cities, idx)
+Base.setindex!(r::Route, val, idx) = setindex!(r.cities, val, idx)
+Base.endof(r::Route) = endof(r.cities)
 
 zero(::Type{Route}) = Route(zeros(City, 0), -1)
 
 function Base.show(io::IO, route::Route)
     print(io, "Route(")
-    print(io, map(city->city.id, route.route))
+    print(io, map(city->city.id, route.cities))
     print(io, " Total length: $(route.score))")
 end
 
@@ -38,12 +38,12 @@ function score(cities::Array{City}, grid::Grid)
 end
 
 function score!(route::Route)
-    route.score = score(route.route)
+    route.score = score(route.cities)
     route.score
 end
 
 function score!(route::Route, grid::Grid)
-    route.score = score(route.route, grid)
+    route.score = score(route.cities, grid)
     route.score
 end
 

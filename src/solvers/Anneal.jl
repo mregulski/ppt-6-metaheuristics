@@ -139,7 +139,7 @@ module Annealing
     function _chunk_neighbour(origin::Route, grid::Grid)::Tuple{Route,Int,Int}
         newroute = Route(origin)
         i = rand(2:length(origin)-1)
-        src_city = newroute.route[i]
+        src_city = newroute.cities[i]
         chunk = grid.chunks[src_city.chunk_x, src_city.chunk_y]
         if length(chunk.cities) < 2
             return _random_neighbour(origin)
@@ -150,7 +150,7 @@ module Annealing
             dst_city = rand(chunk.cities)
         end
 
-        j = findfirst(city->city.id == dst_city.id, newroute.route)
+        j = findfirst(city->city.id == dst_city.id, newroute.cities)
         println("-------")
         println(grid.cities[i])
         println(grid.cities[j])
@@ -161,24 +161,24 @@ module Annealing
 
     function _reverse!(route, i, j)
         idx = i < j ? (i:j) : (j:i)
-        route.score -= distance(route.route[first(idx)], route.route[first(idx)-1]) + distance(route.route[last(idx)], route.route[last(idx)+1])
-        route.route[idx] = route.route[reverse(idx)]
-        route.score += distance(route.route[first(idx)], route.route[first(idx)-1]) + distance(route.route[last(idx)], route.route[last(idx)+1])
+        route.score -= distance(route.cities[first(idx)], route.cities[first(idx)-1]) + distance(route.cities[last(idx)], route.cities[last(idx)+1])
+        route.cities[idx] = route.cities[reverse(idx)]
+        route.score += distance(route.cities[first(idx)], route.cities[first(idx)-1]) + distance(route.cities[last(idx)], route.cities[last(idx)+1])
         route
     end
 
     function _swap!(route, i, j)
-        route.score -= distance(route.route[i], route.route[i-1])
-                    + distance(route.route[i], route.route[i+1])
-                    + distance(route.route[j], route.route[j-1])
-                    + distance(route.route[j], route.route[j+1])
+        route.score -= distance(route.cities[i], route.cities[i-1])
+                    + distance(route.cities[i], route.cities[i+1])
+                    + distance(route.cities[j], route.cities[j-1])
+                    + distance(route.cities[j], route.cities[j+1])
 
-        route.route[i], route.route[j] = route.route[j], route.route[i]
+        route.cities[i], route.cities[j] = route.cities[j], route.cities[i]
 
-        route.score += distance(route.route[i], route.route[i-1])
-                    + distance(route.route[i], route.route[i+1])
-                    + distance(route.route[j], route.route[j-1])
-                    + distance(route.route[j], route.route[j+1])
+        route.score += distance(route.cities[i], route.cities[i-1])
+                    + distance(route.cities[i], route.cities[i+1])
+                    + distance(route.cities[j], route.cities[j-1])
+                    + distance(route.cities[j], route.cities[j+1])
         route
     end
 

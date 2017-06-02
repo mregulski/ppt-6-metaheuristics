@@ -43,7 +43,7 @@ function main(START)
         s0=nearest_neighbour(grid.cities)
         @info open("initial", "w") do f
             println(f, "x,y,id")
-            for c in s0.route
+            for c in s0.cities
                 println(f, "$(c.x),$(c.y),$(c.id)")
             end
         end
@@ -61,12 +61,12 @@ function main(START)
 
     @info open("solution", "w") do f
         println(f, "x,y,id")
-        for c in route.route
+        for c in route.cities
             println(f, "$(c.x),$(c.y),$(c.id)")
         end
     end
     println(STDOUT, route.score)
-    for city in route.route
+    for city in route.cities
             println(STDERR, city.id)
     end
     @log println(Dates.CompoundPeriod(now()-START))

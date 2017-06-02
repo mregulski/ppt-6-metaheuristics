@@ -210,18 +210,18 @@ module Tabu
                 j_id = rand(chunk.cities).id
                 # canary += 1
             end
-            j = findfirst(city->city.id == j_id, neighbour.route)
+            j = findfirst(city->city.id == j_id, neighbour.cities)
             # middle = i < j ? (i:j) : (i:-1:j)
             # println("old: $neighbour")
             # println("i=$i, j=$j")
             if i < j
-                neighbour.score -= distance(neighbour.route[i], neighbour.route[i-1]) + distance(neighbour.route[j], neighbour.route[j+1])
-                neighbour.route[i:j] = neighbour.route[reverse(i:j)]
-                neighbour.score += distance(neighbour.route[i], neighbour.route[i-1]) + distance(neighbour.route[j], neighbour.route[j+1])
+                neighbour.score -= distance(neighbour.cities[i], neighbour.cities[i-1]) + distance(neighbour.cities[j], neighbour.cities[j+1])
+                neighbour.cities[i:j] = neighbour.cities[reverse(i:j)]
+                neighbour.score += distance(neighbour.cities[i], neighbour.cities[i-1]) + distance(neighbour.cities[j], neighbour.cities[j+1])
             else
-                neighbour.score -= distance(neighbour.route[j], neighbour.route[j-1]) + distance(neighbour.route[i], neighbour.route[i+1])
-                neighbour.route[j:i] = neighbour.route[reverse(j:i)]
-                neighbour.score += distance(neighbour.route[j], neighbour.route[j-1]) + distance(neighbour.route[i], neighbour.route[i+1])
+                neighbour.score -= distance(neighbour.cities[j], neighbour.cities[j-1]) + distance(neighbour.cities[i], neighbour.cities[i+1])
+                neighbour.cities[j:i] = neighbour.cities[reverse(j:i)]
+                neighbour.score += distance(neighbour.cities[j], neighbour.cities[j-1]) + distance(neighbour.cities[i], neighbour.cities[i+1])
             end
             n += 1
             produce((neighbour, city.id, j_id)) # avoids allocating a shitload of paths for no good reason
@@ -233,7 +233,7 @@ module Tabu
         i = rand(2+jump_radius:length(origin)-1-jump_radius)
         j = rand(2:length(origin)-1)
         # println("$(i+jump_radius), $(length(origin)-1-jump_radius)")
-        new_route.route[i-jump_radius:i+jump_radius] = shuffle(new_route.route[i-jump_radius:i+jump_radius])
+        new_route.cities[i-jump_radius:i+jump_radius] = shuffle(new_route.cities[i-jump_radius:i+jump_radius])
         return new_route
     end #jump
 end
