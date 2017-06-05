@@ -1,6 +1,5 @@
 #!julia
 include("../src/Tsp.jl")
-println(LOAD_PATH)
 using Tsp.Model
 using Tsp.Solvers
 using Tsp.Debug
@@ -24,52 +23,60 @@ function main(START)
     # x = Tsp.Debug.@config(Debug.DEBUG)
     # @log @printf("loaded grid\n")
     local route::Route
-    method = Solvers.annealing
-    solve = Solvers.solver(method)
-    if method == Solvers.tabu
-        rounds, restart_after, quit_after, min_tabu_duration, max_tabu_duration, n_neighbours, jump_radius = tabu_params(length(cities), length(grid.chunks))
+    # method = Solvers.genetic
+    # solve = Solvers.solver(method)
+    # if method == Solvers.tabu
+    #     rounds, restart_after, quit_after, min_tabu_duration, max_tabu_duration, n_neighbours, jump_radius = tabu_params(length(cities), length(grid.chunks))
 
-        route = solve(grid,
-                            rounds=rounds,
-                            restart_after=restart_after,
-                            quit_after=quit_after,
-                            min_tabu_duration=min_tabu_duration,
-                            max_tabu_duration=max_tabu_duration,
-                            n_neighbours=n_neighbours,
-                            jump_radius=jump_radius)
+    #     route = solve(grid,
+    #                         rounds=rounds,
+    #                         restart_after=restart_after,
+    #                         quit_after=quit_after,
+    #                         min_tabu_duration=min_tabu_duration,
+    #                         max_tabu_duration=max_tabu_duration,
+    #                         n_neighbours=n_neighbours,
+    #                         jump_radius=jump_radius)
 
-    elseif method == Solvers.annealing
-        # tic()
-        s0=nearest_neighbour(grid.cities)
-        @info open("initial", "w") do f
-            println(f, "x,y,id")
-            for c in s0.cities
-                println(f, "$(c.x),$(c.y),$(c.id)")
-            end
-        end
-        route = solve(
-            grid=grid,
-            s0=s0,
-            # s0=Route([grid.cities[1], shuffle(grid.cities[2:end-1])..., grid.cities[1]]),
-            T0=100.0,
-            limit=10000000,
-            starttime=START,
-            timelimit=timelimit)
-        println("initial solution: ", s0.score)
-    end
-    println("final solution: ", route.score)
+    # elseif method == Solvers.annealing
+    #     # tic()
+    #     s0=nearest_neighbour(grid.cities)
+    #     @info open("initial", "w") do f
+    #         println(f, "x,y,id")
+    #         for c in s0.cities
+    #             println(f, "$(c.x),$(c.y),$(c.id)")
+    #         end
+    #     end
+    #     route = solve(
+    #         grid=grid,
+    #         s0=s0,
+    #         # s0=Route([grid.cities[1], shuffle(grid.cities[2:end-1])..., grid.cities[1]]),
+    #         T0=100.0,
+    #         limit=10000000,
+    #         starttime=START,
+    #         timelimit=timelimit)
+    #     println("initial solution: ", s0.score)
+    # end
+    # println("final solution: ", route.score)
 
-    @info open("solution", "w") do f
-        println(f, "x,y,id")
-        for c in route.cities
-            println(f, "$(c.x),$(c.y),$(c.id)")
-        end
-    end
+    # @info open("solution", "w") do f
+    #     println(f, "x,y,id")
+    #     for c in route.cities
+    #         println(f, "$(c.x),$(c.y),$(c.id)")
+    #     end
+    # end
+    route = Tsp.Solvers.Genetic.find_optimal(
+        grid, START, timelimit,
+        pop_size=100,
+        max_generations=500,
+        init_mutation_p=.05,
+        stall_limit=100,
+        use_nn=true
+    )
     println(STDOUT, route.score)
     for city in route.cities
             println(STDERR, city.id)
     end
-    @log println(Dates.CompoundPeriod(now()-START))
+    # @log println(Dates.CompoundPeriod(now()-START))
 
 end
 

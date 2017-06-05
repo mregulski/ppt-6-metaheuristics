@@ -1,9 +1,12 @@
 __precompile__()
+"""
+Solver for the n-city, symmetric, euclidean Travelling Salesman Problem
+"""
 module Tsp
     module Debug
         @enum Level OFF=-1 ERROR=1 WARN LOG INFO DEBUG
 
-        LEVEL = OFF
+        LEVEL = INFO
         export @debug, @info, @log, @warn, @error
 
         for (mac, lvl) in ((:debug, DEBUG),

@@ -1,9 +1,12 @@
 module Solvers
+    using Tsp.Model
+    include("nn.jl")
     include("Tabu.jl")
     include("Anneal.jl")
-    @enum SolverType tabu=1 annealing=2
+    include("Genetic.jl")
+    @enum SolverType tabu=1 annealing=2 genetic=3
 
-    export solver
+    export solver, nearest_neighbour
 
     for s in instances(SolverType)
         @eval export $(Symbol(s))
