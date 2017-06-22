@@ -1,10 +1,9 @@
-# TSP
+# Metaheuristic Algorithms
+Wrocław University of Science and Technology, 2017
 
-Metaheuristic solvers for the Travelling Salesman problem. Written for Metaheuristic Algorithms course.
+Solvers for Travelling Salesman Problem in 2D Euclidean spaces, involving various metaheuristic approaches.
 
-Implemented approaches:
+Implemented algorithms:
 * tabu search
 * simulated annealing
-
-Coming soon:
 * genetic algorithm
